@@ -1,0 +1,149 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id Int @id @default(autoincrement())
+  nom String 
+  email String @unique
+  password String
+  numero String @unique
+  role String? @default("client")
+  profileImageUrl String ?
+  deliveries Delivery[]
+  cares Care[]
+  prescriptions Prescription[] @relation("UserPrescriptions")
+  orders Order[]
+  products Product[]
+  invoices Invoice[]
+  ownerAppointments Appointment[] @relation("OwnerAppointments")
+  ownerPrescriptions Prescription[] @relation("OwnerPrescriptions")
+  vetAppointments Appointment[] @relation("VetAppointments")
+  vetPrescriptions Prescription[] @relation("VetPrescriptions")
+  createdAt DateTime @default(now())
+  updatedAt DateTime  @updatedAt
+
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  nom String 
+  prix Float
+  description String?
+  ownerId Int 
+  owner User @relation(fields:[ownerId],references:[id])
+  cares Care[]
+  ordersproducts OrderProduct[]
+  appointments Appointment[] 
+  images ProducImage[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  quantity Int
+  total Float
+  status String?
+  receiverId Int 
+  receiver User @relation(fields:[receiverId],references:[id])
+  ordersproducts OrderProduct[]
+  invoices Invoice[]
+  deliveries Delivery[]
+  createdAt DateTime @default(now())
+}
+
+model OrderProduct {
+  id Int @id @default(autoincrement())
+  quantityproduct Int 
+  totalproduct Float
+  orderId Int 
+  order Order @relation(fields:[orderId],references:[id])
+  productId Int
+  product Product @relation(fields:[productId],references:[id])
+  createdAt DateTime @default(now())
+}
+
+model ProducImage {
+  id Int @id @default(autoincrement()) 
+  url String
+  productId Int
+  product Product @relation(fields:[productId],references:[id],onDelete: Cascade)
+}
+
+model Delivery {
+  id Int @id @default(autoincrement())
+  status String?
+  orderId Int 
+  order Order @relation(fields:[orderId],references:[id])
+  driverId Int
+  driver User @relation(fields:[driverId],references:[id])
+  createdAt DateTime @default(now())
+}
+
+model Care {
+  id Int @id @default(autoincrement())
+  productId Int
+  product Product @relation(fields:[productId],references:[id])
+  vetId Int
+  vet User @relation(fields:[vetId],references:[id])
+  prescriptions Prescription[] @relation("CarePrescription")
+  createdAt DateTime @default(now())
+}
+
+model Appointment {
+  id Int @id @default(autoincrement())
+  status String?
+  vetId Int
+  vet User @relation("VetAppointments",fields:[vetId],references:[id])
+  ownerId Int
+  owner User @relation("OwnerAppointments",fields:[ownerId],references:[id])
+  productId Int?
+  product Product? @relation(fields:[productId],references:[id])
+  createdAt DateTime @default(now())
+}
+
+model Prescription {
+  id Int @id @default(autoincrement())
+  owner User @relation("UserPrescriptions",fields:[ownerId],references:[id])
+  careId Int?
+  vetId Int
+  vet User @relation("VetPrescriptions",fields:[vetId],references:[id])
+  ownerId Int
+  ownerPrescriptionId Int? 
+  ownerPrescriptions User? @relation("OwnerPrescriptions",fields:[ownerPrescriptionId],references:[id])
+  care Care? @relation("CarePrescription",fields:[careId],references:[id])
+  createdAt DateTime @default(now())
+}
+
+model Invoice {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Order @relation(fields:[orderId],references:[id])
+  clientId Int
+  client User @relation(fields:[clientId],references:[id])
+  createdAt DateTime @default(now())
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  payerName String
+  receiverName String
+  receiverNumber String
+  reason String
+  amount Float
+  createdAt DateTime @default(now())
+}
+

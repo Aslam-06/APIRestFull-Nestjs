@@ -1,0 +1,145 @@
+src/
+│── main.ts                  # Point d’entrée, démarre NestJS
+│── app.module.ts            # Module principal qui importe tous les modules
+│
+├── auth/                    # Authentification JWT + rôles
+│   │── auth.module.ts
+│   │── auth.controller.ts
+│   │── auth.service.ts
+│   │── jwt.strategy.ts
+│   └── guards/jwt.guard.ts
+│   └── dto/
+│        ├── login.dto.ts
+│        └── register.dto.ts
+│
+├── users/                   # Gestion utilisateurs
+│   │── users.module.ts
+│   │── users.controller.ts
+│   │── users.service.ts
+│   └── dto/create-user.dto.ts
+│
+├── products/                # Gestion produits des éleveurs
+│   │── products.module.ts
+│   │── products.controller.ts
+│   │── products.service.ts
+│   └── dto/create-product.dto.ts
+│
+├── orders/                  # Gestion commandes reçues par les éleveurs
+│   │── orders.module.ts
+│   │── orders.controller.ts
+│   │── orders.service.ts
+│   └── dto/create-order.dto.ts
+│
+├── deliveries/              # Gestion livraisons
+│   │── deliveries.module.ts
+│   │── deliveries.controller.ts
+│   │── deliveries.service.ts
+│   └── dto/create-delivery.dto.ts
+│
+├── care/                    # Gestion soins vétérinaires
+│   │── care.module.ts
+│   │── care.controller.ts
+│   │── care.service.ts
+│   └── dto/create-care.dto.ts
+│
+├── appointments/            # Planning consultations vétérinaires
+│   │── appointments.module.ts
+│   │── appointments.controller.ts
+│   │── appointments.service.ts
+│   └── dto/create-appointment.dto.ts
+│
+├── prescriptions/           # Gestion ordonnances
+│   │── prescriptions.module.ts
+│   │── prescriptions.controller.ts
+│   │── prescriptions.service.ts
+│   └── dto/create-prescription.dto.ts
+│
+├── invoices/                # Gestion factures
+│   │── invoices.module.ts
+│   │── invoices.controller.ts
+│   │── invoices.service.ts
+│   └── dto/create-invoice.dto.ts
+│
+├── upload/                  # Upload fichiers (profil, produit)
+│   │── upload.module.ts
+│   │── upload.controller.ts
+│   │── upload.service.ts
+│
+├── prisma/                  # Gestion de la base avec Prisma
+│   │── prisma.module.ts      # Injection du client Prisma
+│   │── prisma.service.ts     # Service central Prisma
+│   └── schema.prisma         # Modèles et relations Prisma
+│
+├── common/                  # Code réutilisable
+│   ├── decorators/roles.decorator.ts  # Décorateur @Roles()
+│   ├── guards/roles.guard.ts          # Vérification rôle
+│   └── enums/
+│        ├── role.enum.ts              # Roles: ADMIN, ELEVEUR, LIVREUR, VETERINAIRE
+│        ├── delivery-status.enum.ts   # Livraisons : PENDING, IN_PROGRESS, DELIVERED
+│        └── consultation-status.enum.ts # Consultations : SCHEDULED, IN_PROGRESS, COMPLETED
+│          # Secret et configuration JWT
+
+
+// modèles
+
+🔹 Utilisateurs
+
+User : id, name, email, password,numero, role
+
+Relations :
+
+1 livreur → N livraisons (deliveries)
+
+1 vétérinaire → N soins (cares)
+
+1 vétérinaire → N ordonnances (prescriptions)
+
+1 éleveur → N commandes reçues (ordersReceived)
+
+1 éleveur → N produits (products)
+
+
+
+🔹 Produits
+
+Product : id, name, price, description,ownerId
+
+Relation : 1 produit → N soins (cares)
+
+
+🔹 Commandes
+
+Order : id,quantity,status, products[], receiverId (éleveur)
+
+Relation : 1 commande → N éleveur (receiver)
+
+
+🔹 Livraisons
+
+Delivery : id, status, orderId, driverId (livreur)
+
+
+🔹 Soins
+
+Care : id, date, productId, vetId
+
+
+🔹 Consultations
+
+Appointment : id, date, status, vetId, userId (éleveur)
+
+
+🔹 Ordonnances
+
+Prescription : id, issuedAt, careId, vetId
+
+
+🔹 Factures
+
+Invoice : id, issuedAt, orderId, userId (éleveur)
+
+
+Payment :
+
+id,payerName,receiverName,receiverNumber,reason ,amount
+
