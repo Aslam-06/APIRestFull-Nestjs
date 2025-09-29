@@ -197,17 +197,15 @@ id,payerName,receiverName,receiverNumber,reason ,amount
 
 ---
 
-## ⚙ Technologies Used  
+## ⚙ Technologies Used
 - [NestJS](https://nestjs.com/) (Node.js framework)  
 - [TypeScript](https://www.typescriptlang.org/)  
 - [JWT](https://jwt.io/) (token-based authentication)  
 - [bcrypt](https://www.npmjs.com/package/bcrypt) (password hashing)  
 - [Passport](http://www.passportjs.org/) (security strategies)  
-- Database: *MySQL or PostgreSQL*  
-
----
-
-## 🚀 Installation & Setup  
+- [class-validator](https://github.com/typestack/class-validator) & [class-transformer](https://github.com/typestack/class-transformer) (DTO validation & transformation)  
+- [Prisma](https://www.prisma.io/) (ORM / database client)  
+- Database: *MySQL*
 
 ### 1️⃣ Clone the project  
 ```bash

@@ -1,0 +1,28 @@
+name: NestJS CI
+
+on:
+  push:
+    branches: [ "main" ]   # Se déclenche à chaque push sur la branche main
+  pull_request:
+    branches: [ "main" ]   # Se déclenche aussi sur les Pull Requests
+
+jobs:
+  build:
+    runs-on: ubuntu-latest   # Machine GitHub (Linux)
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3   
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"       
+
+      - name: Install dependencies
+        run: npm install            
+      - name: Lint code
+        run: npm run lint           
+
+      - name: Build project
+        run: npm run build         
