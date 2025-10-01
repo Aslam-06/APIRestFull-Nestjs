@@ -26,9 +26,9 @@
 # 🚜 Livestock Farming Cooperative - NestJS  
 
 ## 📌 Description  
-This project is a *NestJS* application designed for managing an agricultural cooperative.  
-It provides several features such as *user management, products, appointments, prescriptions, invoices, order and care management*.  
-The application is secured with *JWT, bcrypt, and Passport* and includes an advanced *role-based access control system*.  
+This project is a NestJS backend application designed for managing a livestock cooperative.
+It provides several backend features such as user management, products, veterinary appointments, prescriptions, invoices, order and care management.
+The backend is secured with JWT, bcrypt, and Passport and includes an advanced role-based access control system.  
 
 ---
 
